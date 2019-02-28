@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<script type="text/javascript" src="http://parood.com/wp-includes/js/jquery/jquery.js?ver=1.12.4"></script>
+		<script type="text/javascript" src="http://parood.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1"></script>
+		<script>
+			$ = jQuery.noConflict();
+						
+			var urls = [
+				 "403"
+				,"1440"
+				,"310"
+			];
+
+			function giveArticleList(url_index, page){
+				var xmlhttp;
+				xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function(){
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+						if(xmlhttp.responseText) {
+							$('body').append(xmlhttp.responseText);
+							page = page + 1;
+							setTimeout(giveArticleList(url_index, page),100);
+						}
+						else if(url_index < urls.length - 1) {
+							$('body').append('<hr>');
+							setTimeout(giveArticleList(url_index+1, 1),100);
+						}
+					}
+					else if(xmlhttp.readyState == 4 && xmlhttp.status != 200) { 
+						setTimeout(giveArticleList(url_index, page),1000);
+					}
+				}
+				console.log('http://parood.com/drsajjad/frontiers/article.php?journal='+urls[url_index]+'&page='+page);
+				xmlhttp.open('GET', 'http://parood.com/drsajjad/frontiers/article.php?journal='+urls[url_index]+'&page='+page, true);
+				xmlhttp.send();
+			}
+			giveArticleList(0, 1);
+		</script>
+	</head>
+	<body><table border="1" cellpadding="0" cellspacing="0"></table></body>
+</html>
